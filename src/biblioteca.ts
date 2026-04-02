@@ -97,11 +97,14 @@ export class Usuario{
         return this.librosPrestados
     }
 
-    // ✅ Nuevo: calcula el precio final según membresía
     getPrecioFinal(libro: Libro): number {
-        const precio = libro.getPrecio()
-        return this.membrecia ? precio * 0.8 : precio // 20% de descuento con membresía
+    const precio = libro.getPrecio()
+    if(this.membrecia){
+        return precio * 0.8
+    } else {
+        return precio
     }
+}
 
     tomarLibro(libro:Libro){
         this.librosPrestados.push(libro)
@@ -148,7 +151,6 @@ export class Biblioteca {
         }
 
         if(libro.estaDisponible()){
-            // ✅ Nuevo: muestra el precio con o sin descuento
             const precioFinal = usuario.getPrecioFinal(libro)
             if(usuario.tieneMembrecia()){
                 console.log(`Precio original: $${libro.getPrecio()} - Precio con descuento de membresía (20%): $${precioFinal}`)
@@ -164,7 +166,6 @@ export class Biblioteca {
         }
     }
 
-    // ✅ Corregido: el libro vuelve a la biblioteca
     devolverLibro(libro: Libro, usuario: Usuario) {
         usuario.devolverLibro(libro)
         this.libros.push(libro)
