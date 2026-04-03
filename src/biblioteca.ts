@@ -1,10 +1,15 @@
+export interface Prestable{
+    prestar():void
+    devolver():void
+}
+
 export abstract class Libro implements Prestable {
     protected titulo : string
     protected disponible : boolean
     protected autor : string
     protected precio : number
 
-    constructor(titulo:string , disponible:boolean , autor:string , precio : number) {
+    constructor(titulo:string ,  autor:string , precio : number , disponible:boolean) {  
         this.titulo = titulo
         this.disponible = disponible
         this.autor=autor
@@ -43,15 +48,15 @@ export class LibroLiteratura extends Libro{
     protected paginas : number
     protected genero: string
 
-    constructor( titulo : string , disponible : boolean ,autor:string , paginas:number , precio:number , genero:string){
-        super(titulo,disponible,autor,precio)
+    constructor( titulo : string ,  autor:string , paginas:number , precio:number , genero:string , disponible:boolean){
+        super(titulo,autor,precio,disponible)
         this.paginas=paginas
         this.genero=genero
     }
 
     getDetalles(): string {
-        return this.genero  
-    }
+        return `Título: ${this.titulo} | Autor: ${this.autor} | Paginas: ${this.paginas} | Precio: ${this.precio} | Genero: ${this.genero} | Disponible: ${this.disponible}`
+    }   
 }
 
 
@@ -59,15 +64,15 @@ export class LibroHistorico extends Libro{
     protected anio : number
     protected periodo: string
 
-    constructor( titulo : string , disponible : boolean ,autor:string , anio:number , precio:number , periodo:string){
-        super(titulo,disponible,autor,precio)
+    constructor( titulo : string ,autor:string , anio:number , precio:number , periodo:string , disponible:boolean){
+        super(titulo,autor,precio,disponible)
         this.anio=anio
         this.periodo=periodo
     }
 
     getDetalles(): string {
-        return this.periodo 
-    }
+    return `Título: ${this.titulo} | Autor: ${this.autor} | Año: ${this.anio} | Precio: ${this.precio} | Período: ${this.periodo} | Disponible: ${this.disponible}`
+    }   
 
     
 }
@@ -115,12 +120,18 @@ export class Usuario{
         libro.devolver()
     }
 
+    verDetalles(libro:Libro) : string {
+        return libro.getDetalles()
+    }
+
+    
 }
 
 
 export class Biblioteca {
     libros : Libro[] = []
     usuarios : Usuario[] = []
+    listaDeEspera : Map<Libro, Usuario[]> = new Map
 
 
     getLibros(): Libro[] {
@@ -150,6 +161,7 @@ export class Biblioteca {
             return
         }
 
+
         if(libro.estaDisponible()){
             const precioFinal = usuario.getPrecioFinal(libro)
             if(usuario.tieneMembrecia()){
@@ -160,7 +172,6 @@ export class Biblioteca {
 
             libro.prestar()
             usuario.tomarLibro(libro)
-            this.libros = this.libros.filter(l => l !== libro)
         } else {
             console.log("Este libro no esta disponible")
         }
@@ -168,11 +179,7 @@ export class Biblioteca {
 
     devolverLibro(libro: Libro, usuario: Usuario) {
         usuario.devolverLibro(libro)
-        this.libros.push(libro)
     }
 }
 
-export interface Prestable{
-    prestar():void
-    devolver():void
-}
+
