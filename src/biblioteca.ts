@@ -80,9 +80,9 @@ export class LibroHistorico extends Libro{
 
 export class Usuario{
 
-    protected nombre : string
-    protected librosPrestados: Libro[] = []
-    protected membrecia : boolean
+    private nombre : string
+    private librosPrestados: Libro[] = []
+    private membrecia : boolean
 
 
     constructor(nombre:string , membrecia : boolean){
@@ -129,9 +129,9 @@ export class Usuario{
 
 
 export class Biblioteca {
-    libros : Libro[] = []
-    usuarios : Usuario[] = []
-    listaDeEspera : Map<Libro, Usuario[]> = new Map
+    private libros : Libro[] = []
+    private usuarios : Usuario[] = []
+
 
 
     getLibros(): Libro[] {
